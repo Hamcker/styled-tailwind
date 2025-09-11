@@ -1,0 +1,51 @@
+name: Publish to npm
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Setup Node for npm publish
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Set version from tag
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "Tag: ${GITHUB_REF_NAME} -> Version: ${VERSION}"
+          if [ -z "$VERSION" ]; then echo "Empty version from tag" && exit 1; fi
+          npm version "$VERSION" --no-git-tag-version
+
+      - name: Run tests
+        run: bun test
+
+      - name: Build package
+        run: bun run build
+
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          npm_config_ignore_scripts: true
+        run: |
+          # For scoped public packages ensure public access
+          npm publish --access public

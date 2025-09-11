@@ -1,5 +1,7 @@
 {
-  "name": "styled-tailwind",
+  "name": "@hamcker/styled-tailwind",
+  "version": "1.0.1",
+  "description": "Tiny styled() for Tailwind + React (works with intrinsic elements and custom components)",
   "author": {
     "name": "Hamed Zakeri Miyab",
     "email": "hamcker@gmail.com"
@@ -8,13 +10,43 @@
     "type": "git",
     "url": "git+https://github.com/Hamcker/styled-tailwind.git"
   },
-  "module": "index.ts",
+  "license": "MIT",
   "type": "module",
-  "private": true,
-  "devDependencies": {
-    "@types/bun": "latest"
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "bun run build:js && bun run build:types",
+    "build:js": "bun run build:esm && bun run build:cjs",
+    "build:esm": "bun build ./src/index.ts --outdir ./dist --format esm --sourcemap=external --external react",
+    "build:cjs": "bun build ./src/index.ts --outdir ./dist --format cjs --sourcemap=external --external react",
+    "build:types": "tsc -p tsconfig.build.json",
+    "publish": "bun publish",
+    "clean": "rm -rf dist",
+    "test": "bun test"
   },
   "peerDependencies": {
-    "typescript": "^5"
+    "react": ">=16.8.0",
+    "tailwindcss": ">=3.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/react": "^18.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.0.0"
   }
 }

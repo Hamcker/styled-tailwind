@@ -1,6 +1,6 @@
 {
   "name": "@hamcker/styled-tailwind",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Tiny styled() for Tailwind + React (works with intrinsic elements and custom components)",
   "author": {
     "name": "Hamed Zakeri Miyab",
@@ -31,8 +31,8 @@
   "scripts": {
     "build": "bun run build:js && bun run build:types",
     "build:js": "bun run build:esm && bun run build:cjs",
-    "build:esm": "bun build ./src/index.ts --outdir ./dist --format esm --sourcemap=external --external react",
-    "build:cjs": "bun build ./src/index.ts --outdir ./dist --format cjs --sourcemap=external --external react",
+    "build:esm": "esbuild ./src/index.ts --outfile=./dist/index.js --format=esm --sourcemap --bundle --external:react --external:react/jsx-runtime --external:react/jsx-dev-runtime",
+    "build:cjs": "esbuild ./src/index.ts --outfile=./dist/index.cjs --format=cjs --sourcemap --bundle --external:react --external:react/jsx-runtime --external:react/jsx-dev-runtime",
     "build:types": "tsc -p tsconfig.build.json",
     "publish": "bun publish",
     "clean": "rm -rf dist",
@@ -45,6 +45,7 @@
   "devDependencies": {
     "@types/bun": "latest",
     "@types/react": "^18.0.0",
+    "esbuild": "^0.25.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^5.0.0"

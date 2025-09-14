@@ -20,7 +20,7 @@ function styledFactory<C extends React.ElementType>(Comp: C) {
     >
   ) {
     type Props = P & { as?: React.ElementType };
-    const Styled = React.forwardRef<any, Props>(function Styled(
+    const Styled = React.forwardRef<React.ElementRef<C>, Props>(function Styled(
       { className, as, ...rest }: Props,
       ref
     ) {
@@ -35,7 +35,7 @@ function styledFactory<C extends React.ElementType>(Comp: C) {
       );
       return (
         <FinalComp
-          ref={ref}
+          ref={ref as any}
           {...(rest as any)}
           className={cx(className, computed)}
         />

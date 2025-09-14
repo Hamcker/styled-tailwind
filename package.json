@@ -1,6 +1,6 @@
 {
   "name": "@hamcker/styled-tailwind",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "Tiny styled() for Tailwind + React (works with intrinsic elements and custom components)",
   "author": {
     "name": "Hamed Zakeri Miyab",

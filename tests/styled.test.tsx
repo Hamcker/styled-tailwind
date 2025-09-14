@@ -68,3 +68,27 @@ describe("styled - polymorphic 'as' prop", () => {
     expect(el.props.href).toBe("#");
   });
 });
+
+describe("styled - forwardRef component", () => {
+  const Textarea = React.forwardRef<
+    HTMLTextAreaElement,
+    React.ComponentProps<"textarea">
+  >(({ className, ...props }, ref) => {
+    return (
+      <textarea
+        className={[(className || "")].join(" ").trim()}
+        ref={ref}
+        {...props}
+      />
+    );
+  });
+  Textarea.displayName = "Textarea";
+
+  const STextarea = styled(Textarea)`bg-green-500`;
+
+  it("wraps forwardRef component and forwards className", () => {
+    const el = (STextarea as any).render({ className: "mt-3", children: "x" }, null);
+    expect(el.props.className).toContain("bg-green-500");
+    expect(el.props.className).toContain("mt-3");
+  });
+});

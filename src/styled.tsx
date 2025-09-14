@@ -2,8 +2,10 @@ import * as React from "react";
 import { cx } from "./cx";
 import { compileClasses } from "./compileClasses";
 
+type AnyComponent = keyof JSX.IntrinsicElements | React.JSXElementConstructor<any>;
+
 /** core factory: wraps an underlying element/component with a class template */
-function styledFactory<C extends React.ElementType>(Comp: C) {
+function styledFactory<C extends AnyComponent>(Comp: C) {
   return function styledTemplate<
     P extends React.ComponentPropsWithoutRef<C> & {
       className?: string;
@@ -19,12 +21,12 @@ function styledFactory<C extends React.ElementType>(Comp: C) {
       | ((props: P) => string | number | null | undefined | false)
     >
   ) {
-    type Props = P & { as?: React.ElementType };
+    type Props = P & { as?: AnyComponent };
     const Styled = React.forwardRef<React.ElementRef<C>, Props>(function Styled(
       { className, as, ...rest }: Props,
       ref
     ) {
-      const FinalComp: any = as ?? Comp;
+      const FinalComp: any = as ?? (Comp as any);
       const computed = compileClasses<Props>(
         strings,
         exprs as any[],

@@ -2,7 +2,9 @@ import * as React from "react";
 import { cx } from "./cx";
 import { compileClasses } from "./compileClasses";
 
-type AnyComponent = keyof JSX.IntrinsicElements | React.JSXElementConstructor<any>;
+type AnyComponent =
+  | keyof JSX.IntrinsicElements
+  | React.JSXElementConstructor<any>;
 
 /** core factory: wraps an underlying element/component with a class template */
 function styledFactory<C extends AnyComponent>(Comp: C) {
